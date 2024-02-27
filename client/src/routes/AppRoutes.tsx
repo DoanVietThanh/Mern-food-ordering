@@ -1,4 +1,5 @@
 import UserLayout from "@/layout/UserLayout";
+import AuthCallbackPage from "@/pages/AuthCallbackPage";
 import HomePage from "@/pages/HomePage";
 import { Route, Routes } from "react-router-dom";
 
@@ -13,6 +14,8 @@ const AppRoutes = () => {
       <Route element={<UserLayout showHero={false} />}>
         <Route path="/search/:city" element={<span>Search City</span>} />
       </Route>
+
+      <Route path="/auth-callback" element={<AuthCallbackPage />} />
     </Routes>
   );
 };
