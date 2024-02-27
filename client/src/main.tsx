@@ -1,13 +1,18 @@
 import React from "react";
 
-import AppRoutes from "./routes/AppRoutes";
+import Auth0ProviderNavigate from "./auth/Auth0ProviderNavigate.tsx";
+import AppRoutes from "./routes/AppRoutes.tsx";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
+
+import "./index.css";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <BrowserRouter>
-      <AppRoutes />
+      <Auth0ProviderNavigate>
+        <AppRoutes />
+      </Auth0ProviderNavigate>
     </BrowserRouter>
   </React.StrictMode>
 );
