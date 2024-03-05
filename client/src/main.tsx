@@ -5,6 +5,7 @@ import AppRoutes from "./routes/AppRoutes.tsx";
 import ReactDOM from "react-dom/client";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { BrowserRouter } from "react-router-dom";
+import { Toaster } from "sonner";
 
 import "./index.css";
 
@@ -22,6 +23,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
       <QueryClientProvider client={queryClient}>
         <Auth0ProviderNavigate>
           <AppRoutes />
+          <Toaster visibleToasts={1} position="top-right" richColors />
         </Auth0ProviderNavigate>
       </QueryClientProvider>
     </BrowserRouter>

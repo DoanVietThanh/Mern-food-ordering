@@ -1,6 +1,7 @@
 import UserLayout from "@/layout/UserLayout";
 import AuthCallbackPage from "@/pages/AuthCallbackPage";
 import HomePage from "@/pages/HomePage";
+import UserProfilePage from "@/pages/UserProfilePage";
 import { Route, Routes } from "react-router-dom";
 
 const AppRoutes = () => {
@@ -8,10 +9,10 @@ const AppRoutes = () => {
     <Routes>
       <Route element={<UserLayout showHero />}>
         <Route path="/" element={<HomePage />} />
-        <Route path="/user-profile" element={<span>User Profile page</span>} />
       </Route>
 
       <Route element={<UserLayout showHero={false} />}>
+        <Route path="/user-profile" element={<UserProfilePage />} />
         <Route path="/search/:city" element={<span>Search City</span>} />
       </Route>
 
