@@ -6,6 +6,7 @@ import express, { Application, Response, Request } from "express";
 import morgan from "morgan";
 import { dbConnect } from "./config/dbConnect";
 import { errorHandler, notFound } from "./middleware/errorHandler";
+import { v2 as cloudinary } from "cloudinary";
 
 const app: Application = express();
 dotenv.config();
@@ -13,6 +14,12 @@ dotenv.config();
 const PORT = process.env.PORT_SERVER || 4000;
 
 dbConnect();
+
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
 
 app.use(cors());
 app.use(morgan("dev"));
