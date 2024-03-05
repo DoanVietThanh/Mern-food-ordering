@@ -2,7 +2,7 @@ import cors from "cors";
 import bodyParser from "body-parser";
 import * as dotenv from "dotenv";
 import { appRoutes } from "./routes";
-import express, { Application } from "express";
+import express, { Application, Response, Request } from "express";
 import morgan from "morgan";
 import { dbConnect } from "./config/dbConnect";
 import { errorHandler, notFound } from "./middleware/errorHandler";
@@ -23,6 +23,10 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use("/api/user", appRoutes.userRoutes);
 app.use("/api/order", appRoutes.orderRoutes);
 app.use("/api/restaurant", appRoutes.restaurantRoutes);
+
+app.get("/health", (req: Request, res: Response) => {
+  res.send({ "message: ": "Health OK" });
+});
 
 // Handle Error
 app.use(notFound);

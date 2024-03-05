@@ -1,3 +1,4 @@
+import ProtectedRoute from "@/auth/ProtectedRoute";
 import UserLayout from "@/layout/UserLayout";
 import AuthCallbackPage from "@/pages/AuthCallbackPage";
 import HomePage from "@/pages/HomePage";
@@ -12,7 +13,9 @@ const AppRoutes = () => {
       </Route>
 
       <Route element={<UserLayout showHero={false} />}>
-        <Route path="/user-profile" element={<UserProfilePage />} />
+        <Route element={<ProtectedRoute />}>
+          <Route path="/user-profile" element={<UserProfilePage />} />
+        </Route>
         <Route path="/search/:city" element={<span>Search City</span>} />
       </Route>
 

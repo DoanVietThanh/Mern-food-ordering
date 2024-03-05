@@ -31,3 +31,15 @@ export const updateCurrentUser = async (req: Request, res: Response) => {
     res.status(500).json({ message: "Update current user fail" });
   }
 };
+
+export const getCurrentUser = async (req: Request, res: Response) => {
+  try {
+    const user = await UserModel.findById(req.userId);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    res.json(user);
+  } catch (error: any) {
+    res.status(500).json({ message: "Get User fail" });
+  }
+};
