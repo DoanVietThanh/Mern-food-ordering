@@ -2,6 +2,7 @@ import ProtectedRoute from "@/auth/ProtectedRoute";
 import UserLayout from "@/layout/UserLayout";
 import AuthCallbackPage from "@/pages/AuthCallbackPage";
 import HomePage from "@/pages/HomePage";
+import ManageRestaurantPage from "@/pages/ManageRestaurantPage";
 import UserProfilePage from "@/pages/UserProfilePage";
 import { Route, Routes } from "react-router-dom";
 
@@ -15,6 +16,7 @@ const AppRoutes = () => {
       <Route element={<UserLayout showHero={false} />}>
         <Route element={<ProtectedRoute />}>
           <Route path="/user-profile" element={<UserProfilePage />} />
+          <Route path="/manage-restaurant" element={<ManageRestaurantPage />} />
         </Route>
         <Route path="/search/:city" element={<span>Search City</span>} />
       </Route>
