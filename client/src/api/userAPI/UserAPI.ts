@@ -68,7 +68,6 @@ export const useCreateUser = () => {
 
 export const useUpdateUser = () => {
   const { getAccessTokenSilently } = useAuth0();
-
   const updateUserRequest = async (formData: UpdateUserRequest) => {
     const accessToken = await getAccessTokenSilently();
     console.log("formData: ", formData);

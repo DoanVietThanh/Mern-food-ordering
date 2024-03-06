@@ -1,7 +1,10 @@
+import { useCreateMyRestaurant } from "@/api/restaurantAPI/RestaurantAPI";
 import FormManageRestaurant from "@/components/forms/ManageRestaurant/FormManageRestaurant";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 const ManageRestaurantPage = () => {
+  const { createRestaurant, isLoading: isLoadingCreateRestaurant } = useCreateMyRestaurant();
+
   return (
     <Tabs defaultValue="orders">
       <TabsList>
@@ -10,7 +13,7 @@ const ManageRestaurantPage = () => {
       </TabsList>
       <TabsContent value="orders" className="space-y-5 bg-gray-50 p-10 rounded-lg"></TabsContent>
       <TabsContent value="manage-restaurant">
-        <FormManageRestaurant />
+        <FormManageRestaurant isLoading={isLoadingCreateRestaurant} onSave={createRestaurant} />
       </TabsContent>
     </Tabs>
   );
