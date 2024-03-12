@@ -1,3 +1,5 @@
+import { useEffect } from "react";
+
 import CuisinesSection from "./CuisinesSection";
 import DetailSection from "./DetailSection";
 import ImageSection from "./ImageSection";
@@ -5,6 +7,7 @@ import MenuSection from "./MenuSection";
 import LoadingButton from "@/components/LoadingButton";
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
+import { Restaurant } from "@/types/restaurant.types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -43,11 +46,12 @@ const formSchema = z.object({
 type RestaurantFormData = z.infer<typeof formSchema>;
 
 type FormManageRestaurantProps = {
+  restaurant?: Restaurant;
   isLoading: boolean;
   onSave: (formRestaurant: FormData) => void;
 };
 
-const FormManageRestaurant = ({ isLoading, onSave }: FormManageRestaurantProps) => {
+const FormManageRestaurant = ({ isLoading, onSave, restaurant }: FormManageRestaurantProps) => {
   const form = useForm<RestaurantFormData>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -56,13 +60,28 @@ const FormManageRestaurant = ({ isLoading, onSave }: FormManageRestaurantProps) 
     },
   });
 
+  useEffect(() => {
+    if (!restaurant) return;
+    const deliveryPriceFormatted = parseInt((restaurant.deliveryPrice / 100).toFixed(2));
+    const menuItemsFormatted = restaurant.menuItems.map((item) => ({
+      ...item,
+      price: parseInt((item.price / 100).toFixed(2)),
+    }));
+    const updatedRestaurant = {
+      ...restaurant,
+      deliveryPrice: deliveryPriceFormatted,
+      menuItems: menuItemsFormatted,
+    };
+
+    form.reset(updatedRestaurant);
+  }, [form, restaurant]);
+
   const onSubmit = (formDataJson: RestaurantFormData) => {
     console.log("formDataJSON: ", formDataJson);
     const formData = new FormData();
     formData.append("restaurantName", formDataJson.restaurantName);
     formData.append("city", formDataJson.city);
     formData.append("country", formDataJson.country);
-
     formData.append("deliveryPrice", (formDataJson.deliveryPrice * 100).toString());
     formData.append("estimatedDeliveryTime", formDataJson.estimatedDeliveryTime.toString());
     formDataJson.cuisines.forEach((cuisine, index) => {
@@ -75,7 +94,6 @@ const FormManageRestaurant = ({ isLoading, onSave }: FormManageRestaurantProps) 
     if (formDataJson.imageFile) {
       formData.append(`imageFile`, formDataJson.imageFile);
     }
-
     onSave(formData);
   };
 
