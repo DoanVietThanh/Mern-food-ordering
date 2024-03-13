@@ -102,3 +102,23 @@ export const useSearchRestaurants = (searchState: SearchState, city?: string) =>
   if (error) toast.error("Fail to show restaurants");
   return { searchedRestaurants, isLoading };
 };
+
+// Hook: useGetRestaurant
+export const useGetRestaurant = (restaurantId?: string) => {
+  const getRestaurantRequest = async (): Promise<Restaurant> => {
+    const response = await fetch(`${API_BASE_URL}/api/restaurant/detail/${restaurantId}`);
+    if (!response.ok) {
+      throw new Error("Fail to show restaurant");
+    }
+    return response.json();
+  };
+  const {
+    data: restaurant,
+    isLoading,
+    error,
+  } = useQuery("fetchDetailRestaurant", getRestaurantRequest, {
+    enabled: !!restaurantId,
+  });
+  if (error) toast.error("Fail to show restaurant");
+  return { restaurant, isLoading };
+};

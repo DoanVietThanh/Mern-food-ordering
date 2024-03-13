@@ -25,9 +25,7 @@ export const createMyRestaurant = async (req: Request, res: Response) => {
       user: req.userId,
     });
     if (existingRestaurant) {
-      return res
-        .status(409)
-        .json({ message: "User restaurant already exists" });
+      return res.status(409).json({ message: "User restaurant already exists" });
     }
     // Save record Restaurant
     const restaurant = new RestaurantModel(req.body);
@@ -92,18 +90,13 @@ export const searchRestaurant = async (req: Request, res: Response) => {
 
     if (selectedCuisines) {
       // cuisinesArray="italian,burger" => ["italian", "burger"] -> ["/italian/i", "/burger/i"]
-      const cuisinesArray = selectedCuisines
-        .split(",")
-        .map((cuisine) => new RegExp(cuisine, "i"));
+      const cuisinesArray = selectedCuisines.split(",").map((cuisine) => new RegExp(cuisine, "i"));
       query["cuisines"] = { $all: cuisinesArray };
     }
 
     if (searchQuery) {
       const searchRegex = new RegExp(searchQuery, "i");
-      query["$or"] = [
-        { restaurantName: searchRegex },
-        { cuisines: { $in: [searchRegex] } },
-      ];
+      query["$or"] = [{ restaurantName: searchRegex }, { cuisines: { $in: [searchRegex] } }];
     }
     const pageSize = 10;
     const skip = (page - 1) * pageSize;
@@ -127,6 +120,20 @@ export const searchRestaurant = async (req: Request, res: Response) => {
   }
 };
 
+// API: Get Restaurant By Id
+export const getRestaurantById = async (req: Request, res: Response) => {
+  try {
+    const { restaurantId } = req.params;
+    const existingRestaurant = await RestaurantModel.findById(restaurantId);
+    if (!existingRestaurant) {
+      res.status(404).json({ message: "Restaurant not found" });
+    }
+    res.json(existingRestaurant);
+  } catch (error: any) {
+    res.status(500).json({ message: "Fail to get Restaurant" });
+  }
+};
+
 // Function: Upload Image
 const uploadImage = async (file: Express.Multer.File) => {
   const image = file as Express.Multer.File;
@@ -137,26 +144,3 @@ const uploadImage = async (file: Express.Multer.File) => {
   });
   return uploadResponse.url;
 };
-
-// uploadResponse:  {
-//     asset_id: 'b6384027e4f6df64ef5f3dd669ad510d',
-//     public_id: 'food-ordering/ozarzdw68dmgo496fyqa',
-//     version: 1709631420,
-//     version_id: '05cb74f1afe1df56be2bb3a75c76fa3e',
-//     signature: '786a5c7bcd64650cb60a2a5bca41f821d2a9f42e',
-//     width: 670,
-//     height: 447,
-//     format: 'jpg',
-//     resource_type: 'image',
-//     created_at: '2024-03-05T09:37:00Z',
-//     tags: [],
-//     bytes: 137216,
-//     type: 'upload',
-//     etag: '9e90cea12015061940091a7c216f0ebf',
-//     placeholder: false,
-//     url: 'http://res.cloudinary.com/thanh2k3/image/upload/v1709631420/food-ordering/ozarzdw68dmgo496fyqa.jpg',
-//     secure_url: 'https://res.cloudinary.com/thanh2k3/image/upload/v1709631420/food-ordering/ozarzdw68dmgo496fyqa.jpg',
-//     folder: 'food-ordering',
-//     access_mode: 'public',
-//     api_key: '691262638417663'
-//   }

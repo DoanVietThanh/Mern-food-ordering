@@ -3,6 +3,7 @@ import multer from "multer";
 import {
   createMyRestaurant,
   getMyRestaurant,
+  getRestaurantById,
   searchRestaurant,
   updateMyRestaurant,
 } from "../controller/RestaurantCtrl";
@@ -21,6 +22,7 @@ const upload = multer({
 export const restaurantRoutes = express.Router();
 
 restaurantRoutes.get("/search/:city", searchRestaurant);
+restaurantRoutes.get("/detail/:restaurantId", getRestaurantById);
 restaurantRoutes.get("/", jwtCheck, jwtParse, getMyRestaurant);
 
 restaurantRoutes.post(
