@@ -1,8 +1,13 @@
 import express from "express";
 import multer from "multer";
+import {
+  createMyRestaurant,
+  getMyRestaurant,
+  searchRestaurant,
+  updateMyRestaurant,
+} from "../controller/RestaurantCtrl";
 import { jwtCheck, jwtParse } from "../middleware/auth";
 import { validateRestaurantRequest } from "../middleware/validation";
-import { createMyRestaurant, getMyRestaurant, updateMyRestaurant } from "../controller/RestaurantCtrl";
 
 const storage = multer.memoryStorage();
 
@@ -15,6 +20,7 @@ const upload = multer({
 
 export const restaurantRoutes = express.Router();
 
+restaurantRoutes.get("/search/:city", searchRestaurant);
 restaurantRoutes.get("/", jwtCheck, jwtParse, getMyRestaurant);
 
 restaurantRoutes.post(
