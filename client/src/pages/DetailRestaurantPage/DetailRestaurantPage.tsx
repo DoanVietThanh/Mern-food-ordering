@@ -1,9 +1,11 @@
 import { useState } from "react";
 
+import CheckoutButton from "./CheckoutButton";
 import MenuItem from "./MenuItem";
 import OrderSummary from "./OrderSummary";
 import RestaurantInfo from "./RestaurantInfo";
 import { useGetRestaurant } from "@/api/restaurantAPI/RestaurantAPI";
+import { UserFormData } from "@/components/forms/UserProfile/FormUserProfile";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { Card, CardFooter } from "@/components/ui/card";
 import { MenuItem as MenuItemProps } from "@/types/restaurant.types";
@@ -60,6 +62,10 @@ const DetailRestaurantPage = () => {
     });
   };
 
+  const handleCheckout = (userFormDataa: UserFormData) => {
+    console.log(userFormDataa);
+  };
+
   return (
     <div className="flex flex-col gap-10">
       <AspectRatio ratio={16 / 5}>
@@ -73,12 +79,11 @@ const DetailRestaurantPage = () => {
             <MenuItem key={menuItem._id} menuItem={menuItem} addToCart={() => addToCart(menuItem)} />
           ))}
         </div>
-
         <div>
           <Card>
             <OrderSummary restaurant={restaurant} cartItems={cartItems} removeFromCart={removeFromCart} />
             <CardFooter>
-              {/* <CheckoutButton disabled={cartItems.length === 0} onCheckout={onCheckout} isLoading={isCheckoutLoading} /> */}
+              <CheckoutButton disabled={cartItems.length === 0} onCheckout={handleCheckout} isLoading={false} />
             </CardFooter>
           </Card>
         </div>
