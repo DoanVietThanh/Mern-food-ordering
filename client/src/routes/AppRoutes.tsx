@@ -1,5 +1,6 @@
 import ProtectedRoute from "@/auth/ProtectedRoute";
 import UserLayout from "@/layout/UserLayout";
+import NotFoundPage from "@/pages/404/NotFoundPage";
 import AuthCallbackPage from "@/pages/AuthCallbackPage";
 import DetailRestaurantPage from "@/pages/DetailRestaurantPage";
 import HomePage from "@/pages/HomePage";
@@ -25,6 +26,10 @@ const AppRoutes = () => {
       </Route>
 
       <Route path="/auth-callback" element={<AuthCallbackPage />} />
+
+      <Route element={<UserLayout showHero />}>
+        <Route path="*" element={<NotFoundPage />} />
+      </Route>
     </Routes>
   );
 };

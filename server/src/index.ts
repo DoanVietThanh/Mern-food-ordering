@@ -23,10 +23,14 @@ cloudinary.config({
 
 app.use(cors());
 app.use(morgan("dev"));
+
+app.use("/api/order/checkout/webhooks", express.raw({ type: "*/*" }));
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
 // List of Routes
+
 app.use("/api/user", appRoutes.userRoutes);
 app.use("/api/order", appRoutes.orderRoutes);
 app.use("/api/restaurant", appRoutes.restaurantRoutes);
