@@ -1,10 +1,16 @@
 import { SearchState } from "@/pages/SearchPage/SearchPage";
+import { Order } from "@/types/order.types";
 import { Restaurant, RestaurantSearchResponse } from "@/types/restaurant.types";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useMutation, useQuery } from "react-query";
 import { toast } from "sonner";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
+type UpdateOrderStatusRequest = {
+  orderId: string;
+  status: string;
+};
 
 // Hook: useGetMyRestaurant
 export const useGetMyRestaurant = () => {
@@ -26,6 +32,63 @@ export const useGetMyRestaurant = () => {
   const { data: restaurant, isLoading, error } = useQuery("fetchMyRestaurant", getMyRestaurantRequest);
   if (error) toast.error("Unable to get restaurant");
   return { restaurant, isLoading };
+};
+
+// Hook: useGetMyRestaurantOrder
+export const useGetMyRestaurantOrder = () => {
+  const { getAccessTokenSilently } = useAuth0();
+  const getMyRestaurantOrderRequest = async (): Promise<Order[]> => {
+    const accessToken = await getAccessTokenSilently();
+    const response = await fetch(`${API_BASE_URL}/api/restaurant/order`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+    if (!response.ok) {
+      throw new Error("Fail to get restaurant order");
+    }
+    return response.json();
+  };
+  const { data: myRestaurantOrder, isLoading, error } = useQuery("fetchMyRestaurantOrder", getMyRestaurantOrderRequest);
+  if (error) toast.error("Fail to get restaurant order");
+  return {
+    myRestaurantOrder,
+    isLoading,
+  };
+};
+
+// Hook: useUpdateMyRestaurantOrder
+export const useUpdateMyRestaurantOrder = () => {
+  const { getAccessTokenSilently } = useAuth0();
+  const updateMyRestaurantOrder = async (updateStatusOrderRequest: UpdateOrderStatusRequest) => {
+    const accessToken = await getAccessTokenSilently();
+    const response = await fetch(`${API_BASE_URL}/api/restaurant/order/${updateStatusOrderRequest.orderId}/status`, {
+      method: "PATCH",
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ status: updateStatusOrderRequest.status }),
+    });
+    if (!response.ok) {
+      throw new Error("Failed to update status");
+    }
+    return response.json();
+  };
+  const {
+    mutateAsync: updateRestaurantStatus,
+    isLoading,
+    isError,
+    isSuccess,
+    reset,
+  } = useMutation(updateMyRestaurantOrder);
+  if (isSuccess) toast.success("Order updated");
+  if (isError) {
+    toast.error("Unable to update order");
+    reset();
+  }
+  return { updateRestaurantStatus, isLoading };
 };
 
 // Hook: useCreateMyRestaurant

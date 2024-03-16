@@ -22,6 +22,18 @@ const STRIPE = new Stripe(process.env.STRIPE_API_KEY as string);
 const FRONTEND_URL = process.env.FRONTEND_URL as string;
 const STRIPE_ENDPOINT_SECRET = process.env.STRIPE_WEBHOOK_SECRET as string;
 
+export const getMyOrders = async (req: Request, res: Response) => {
+  try {
+    const existingOrders = await OrderModel.find({ user: req.userId }).populate("user").populate("restaurant");
+    if (!existingOrders) {
+      return res.status(404).json({ message: "Order not found" });
+    }
+    return res.json(existingOrders);
+  } catch (error: any) {
+    return res.status(500).json({ message: "Fail to get orders" });
+  }
+};
+
 export const createCheckoutSession = async (req: Request, res: Response) => {
   try {
     const checkoutSessionRequest: CheckoutSessionRequest = req.body;

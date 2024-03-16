@@ -5,6 +5,7 @@ import AuthCallbackPage from "@/pages/AuthCallbackPage";
 import DetailRestaurantPage from "@/pages/DetailRestaurantPage";
 import HomePage from "@/pages/HomePage";
 import ManageRestaurantPage from "@/pages/ManageRestaurantPage";
+import OrderStatusPage from "@/pages/OrderStatusPage";
 import SearchPage from "@/pages/SearchPage";
 import UserProfilePage from "@/pages/UserProfilePage";
 import { Route, Routes } from "react-router-dom";
@@ -20,6 +21,7 @@ const AppRoutes = () => {
         <Route element={<ProtectedRoute />}>
           <Route path="/user-profile" element={<UserProfilePage />} />
           <Route path="/manage-restaurant" element={<ManageRestaurantPage />} />
+          <Route path="/order-status" element={<OrderStatusPage />} />
         </Route>
         <Route path="/search/:city" element={<SearchPage />} />
         <Route path="/detail-restaurant/:restaurantId" element={<DetailRestaurantPage />} />

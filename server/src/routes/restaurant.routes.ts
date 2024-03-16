@@ -3,9 +3,11 @@ import multer from "multer";
 import {
   createMyRestaurant,
   getMyRestaurant,
+  getMyRestaurantOrder,
   getRestaurantById,
   searchRestaurant,
   updateMyRestaurant,
+  updateOrderStatus,
 } from "../controller/RestaurantCtrl";
 import { jwtCheck, jwtParse } from "../middleware/auth";
 import { validateRestaurantRequest } from "../middleware/validation";
@@ -24,6 +26,8 @@ export const restaurantRoutes = express.Router();
 restaurantRoutes.get("/search/:city", searchRestaurant);
 restaurantRoutes.get("/detail/:restaurantId", getRestaurantById);
 restaurantRoutes.get("/", jwtCheck, jwtParse, getMyRestaurant);
+restaurantRoutes.get("/order", jwtCheck, jwtParse, getMyRestaurantOrder);
+restaurantRoutes.get("/order/:orderId/status", jwtCheck, jwtParse, updateOrderStatus);
 
 restaurantRoutes.post(
   "/",

@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { RestaurantModel } from "../model/restaurantModel";
 import { v2 as cloudinary } from "cloudinary";
 import mongoose from "mongoose";
+import { OrderModel } from "../model/orderModel";
 
 // API: Get My Restaurant
 export const getMyRestaurant = async (req: Request, res: Response) => {
@@ -131,6 +132,41 @@ export const getRestaurantById = async (req: Request, res: Response) => {
     res.json(existingRestaurant);
   } catch (error: any) {
     res.status(500).json({ message: "Fail to get Restaurant" });
+  }
+};
+
+export const getMyRestaurantOrder = async (req: Request, res: Response) => {
+  try {
+    const restaurant = await RestaurantModel.findOne({ user: req.userId });
+    if (!restaurant) {
+      return res.status(404).json({ message: "Restaurant not found" });
+    }
+    const orders = await OrderModel.find({ restaurant: restaurant._id }).populate("restaurant").populate("user");
+    res.json(orders);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Something went wrong" });
+  }
+};
+
+export const updateOrderStatus = async (req: Request, res: Response) => {
+  try {
+    const { orderId } = req.params;
+    const { status } = req.body;
+    const order = await OrderModel.findById(orderId);
+    if (!order) {
+      return res.status(404).json({ message: "Order not found" });
+    }
+    const restaurant = await RestaurantModel.findById(order.restaurant);
+    if (restaurant?.user?._id.toString() !== req.userId) {
+      return res.status(401).send();
+    }
+    order.status = status;
+    await order.save();
+    res.status(200).json(order);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Unable to update order status" });
   }
 };
 
