@@ -22,6 +22,7 @@ const OrderItemCard = ({ order }: OrderItemCardProps) => {
   }, [order.status]);
 
   const handleStatusChange = async (newStatus: OrderStatus) => {
+    console.log(" order._id: ", order._id);
     await updateRestaurantStatus({
       orderId: order._id as string,
       status: newStatus,

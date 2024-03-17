@@ -66,7 +66,13 @@ export const useGetMyOrders = () => {
     return response.json();
   };
 
-  const { data: myOrders, isLoading, error } = useQuery("fetchMyOrders", getMyOrderRequest);
+  const {
+    data: myOrders,
+    isLoading,
+    error,
+  } = useQuery("fetchMyOrders", getMyOrderRequest, {
+    refetchInterval: 5000,
+  });
   if (error) toast.error("Fail to get order");
   return {
     myOrders,
